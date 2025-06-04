@@ -20,18 +20,14 @@ class Settings(BaseSettings):
     app_name: str = "uPay API"
     debug: bool = False
     database_url: str = Field(
-        default="sqlite:///./upay.db", 
-        description="Database connection string"
+        default="sqlite:///./upay.db", description="Database connection string"
     )
     posting_key: str = Field(
-        default="", 
-        description="Authentication key for validating uPay requests"
+        default="", description="Authentication key for validating uPay requests"
     )
 
     model_config = SettingsConfigDict(
-        env_file=".env", 
-        env_file_encoding="utf-8", 
-        case_sensitive=False
+        env_file=".env", env_file_encoding="utf-8", case_sensitive=False
     )
 
 

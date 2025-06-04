@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from upayapi.config import settings
 from upayapi.database import engine, Base
 from upayapi.routes import upay
+
 # Import models to ensure they are registered with Base.metadata
 from upayapi.models import Transaction
 

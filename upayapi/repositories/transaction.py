@@ -68,9 +68,11 @@ class TransactionRepository:
         Returns:
             The transaction if found, None otherwise.
         """
-        return self.db.query(Transaction).filter(
-            Transaction.tpg_trans_id == tpg_trans_id
-        ).first()
+        return (
+            self.db.query(Transaction)
+            .filter(Transaction.tpg_trans_id == tpg_trans_id)
+            .first()
+        )
 
     def get_all(self) -> List[Transaction]:
         """Get all transactions.

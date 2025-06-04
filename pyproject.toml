@@ -25,18 +25,17 @@ dev = [
     "ruff",
     "pyright",
     "hatchling",
+    "pytest",
+    "httpx",
 ]
 
 [tool.ruff]
 target-version = "py312"
-line-length = 88
-select = ["E", "F", "B", "I", "N", "UP", "ANN", "RUF", "FA"]
-ignore = []
+
+[tool.ruff.lint]
+select = ["FAST"]
 
 [tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-line-ending = "auto"
 
 [tool.pyright]
 typeCheckingMode = "strict"

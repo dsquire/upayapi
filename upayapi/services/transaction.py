@@ -95,7 +95,9 @@ class TransactionService:
 
         # Validate payment date
         try:
-            pmt_date = datetime.strptime(transaction_data["pmt_date"], "%m/%d/%Y").date()
+            pmt_date = datetime.strptime(
+                transaction_data["pmt_date"], "%m/%d/%Y"
+            ).date()
         except ValueError:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

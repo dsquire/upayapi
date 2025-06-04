@@ -1,6 +1,6 @@
 """uPay posting endpoint routes."""
 
-from typing import Dict, Any
+from typing import Annotated, Dict, Any
 
 from fastapi import APIRouter, Depends, Form, HTTPException, status
 from fastapi.responses import JSONResponse
@@ -12,14 +12,14 @@ router = APIRouter(prefix="/upay", tags=["upay"])
 
 @router.post("/posting")
 async def upay_posting(
-    posting_key: str = Form(...),
-    tpg_trans_id: str = Form(...),
-    session_identifier: str = Form(...),
-    pmt_status: str = Form(...),
-    pmt_amt: str = Form(...),
-    pmt_date: str = Form(...),
-    name_on_acct: str = Form(...),
-    transaction_service: TransactionService = Depends(),
+    posting_key: Annotated[str, Form()],
+    tpg_trans_id: Annotated[str, Form()],
+    session_identifier: Annotated[str, Form()],
+    pmt_status: Annotated[str, Form()],
+    pmt_amt: Annotated[str, Form()],
+    pmt_date: Annotated[str, Form()],
+    name_on_acct: Annotated[str, Form()],
+    transaction_service: Annotated[TransactionService, Depends()],
 ) -> Dict[str, Any]:
     """Process a uPay posting request.
 
@@ -57,7 +57,7 @@ async def upay_posting(
     except Exception as e:
         # Log the error (in a production environment)
         # logger.error(f"Error processing uPay posting: {str(e)}")
-        
+
         # Return a generic error response
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
