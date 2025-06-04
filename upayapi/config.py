@@ -1,6 +1,5 @@
 """Configuration settings for the uPay API."""
 
-
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 

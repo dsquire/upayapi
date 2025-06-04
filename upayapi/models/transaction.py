@@ -1,6 +1,5 @@
 """Transaction model for the uPay API."""
 
-
 from sqlalchemy import Column, Integer, String, Date, Numeric, DateTime
 from sqlalchemy.sql import func
 
