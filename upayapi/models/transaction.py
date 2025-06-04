@@ -1,10 +1,7 @@
 """Transaction model for the uPay API."""
 
-from datetime import date
-from typing import Optional
-from decimal import Decimal
 
-from sqlalchemy import Column, Integer, String, Date, Numeric, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Date, Numeric, DateTime
 from sqlalchemy.sql import func
 
 from upayapi.database import Base

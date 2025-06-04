@@ -3,7 +3,6 @@
 from typing import Annotated, Dict, Any
 
 from fastapi import APIRouter, Depends, Form, HTTPException, status
-from fastapi.responses import JSONResponse
 
 from upayapi.services.transaction import TransactionService
 

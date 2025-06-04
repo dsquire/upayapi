@@ -1,6 +1,5 @@
 """Tests for the uPay API endpoints."""
 
-from datetime import datetime
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine

@@ -1,8 +1,8 @@
 """Transaction service for the uPay API."""
 
-from datetime import date, datetime
+from datetime import datetime
 from decimal import Decimal
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
 from fastapi import HTTPException, status, Depends
 from sqlalchemy.orm import Session

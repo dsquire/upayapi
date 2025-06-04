@@ -33,7 +33,7 @@ dev = [
 target-version = "py312"
 
 [tool.ruff.lint]
-select = ["FAST"]
+select = ["FAST", "F401"]
 
 [tool.ruff.format]
 
