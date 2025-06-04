@@ -1,0 +1,35 @@
+### Test the root endpoint
+GET http://localhost:8000/
+
+### Test the health endpoint
+GET http://localhost:8000/health
+
+### Test the uPay posting endpoint with valid data
+POST http://localhost:8000/upay/posting
+Content-Type: application/x-www-form-urlencoded
+
+posting_key=your_secure_posting_key&tpg_trans_id=12345&session_identifier=session123&pmt_status=success&pmt_amt=100.00&pmt_date=01/01/2025&name_on_acct=John Doe
+
+### Test the uPay posting endpoint with invalid posting key
+POST http://localhost:8000/upay/posting
+Content-Type: application/x-www-form-urlencoded
+
+posting_key=invalid_key&tpg_trans_id=12345&session_identifier=session123&pmt_status=success&pmt_amt=100.00&pmt_date=01/01/2025&name_on_acct=John Doe
+
+### Test the uPay posting endpoint with invalid payment status
+POST http://localhost:8000/upay/posting
+Content-Type: application/x-www-form-urlencoded
+
+posting_key=your_secure_posting_key&tpg_trans_id=12345&session_identifier=session123&pmt_status=invalid&pmt_amt=100.00&pmt_date=01/01/2025&name_on_acct=John Doe
+
+### Test the uPay posting endpoint with invalid payment amount
+POST http://localhost:8000/upay/posting
+Content-Type: application/x-www-form-urlencoded
+
+posting_key=your_secure_posting_key&tpg_trans_id=12345&session_identifier=session123&pmt_status=success&pmt_amt=invalid&pmt_date=01/01/2025&name_on_acct=John Doe
+
+### Test the uPay posting endpoint with invalid payment date
+POST http://localhost:8000/upay/posting
+Content-Type: application/x-www-form-urlencoded
+
+posting_key=your_secure_posting_key&tpg_trans_id=12345&session_identifier=session123&pmt_status=success&pmt_amt=100.00&pmt_date=invalid&name_on_acct=John Doe
