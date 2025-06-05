@@ -1,9 +1,10 @@
 """Transaction model for the uPay API."""
 
-from sqlalchemy import Column, Integer, String, Date, Numeric, DateTime
+from sqlalchemy import Column, Integer, String, Date, Numeric, DateTime, Enum
 from sqlalchemy.sql import func
 
 from upayapi.database import Base
+from upayapi.models.schemas import PaymentStatus
 
 
 class Transaction(Base):
@@ -25,7 +26,7 @@ class Transaction(Base):
     id = Column(Integer, primary_key=True, index=True)
     tpg_trans_id = Column(String, unique=True, index=True, nullable=False)
     session_identifier = Column(String, index=True, nullable=False)
-    pmt_status = Column(String, nullable=False)
+    pmt_status = Column(Enum(PaymentStatus), nullable=False)
     pmt_amt = Column(Numeric(precision=10, scale=2), nullable=False)
     pmt_date = Column(Date, nullable=False)
     name_on_acct = Column(String, nullable=False)

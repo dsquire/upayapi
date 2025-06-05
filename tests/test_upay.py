@@ -66,7 +66,11 @@ def test_health():
     """Test the health check endpoint."""
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "healthy"}
+    response_data = response.json()
+    assert "status" in response_data
+    assert response_data["status"] == "healthy"
+    assert "application" in response_data
+    assert "database" in response_data
 
 
 def test_upay_posting_missing_params():

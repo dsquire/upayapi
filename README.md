@@ -44,7 +44,12 @@ This API handles uPay Posting URL parameters sent by the TouchNet Marketplace uP
    uv pip install -e .
    ```
 
-5. Create a `.env` file with your configuration:
+5. Install development dependencies (required for testing):
+   ```
+   uv pip install -e ".[dev]"
+   ```
+
+6. Create a `.env` file with your configuration:
    ```
    DEBUG=True
    DATABASE_URL=sqlite:///./upay.db
@@ -85,11 +90,19 @@ alembic revision --autogenerate -m "Description of changes"
 
 ## Testing
 
+Before running tests, ensure you have installed the development dependencies as described in the Installation section:
+
+```
+uv pip install -e ".[dev]"
+```
+
 Run tests with:
 
 ```
 pytest
 ```
+
+The test suite includes unit tests for API endpoints and database operations.
 
 ## License
 
