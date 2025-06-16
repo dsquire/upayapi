@@ -3,11 +3,13 @@
 from datetime import datetime
 from decimal import Decimal
 
-from fastapi import HTTPException, status, Depends
+from fastapi import Depends, status
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from upayapi.config import settings
 from upayapi.database import get_db
+from upayapi.exceptions import AuthenticationError, DatabaseError, DuplicateError
 from upayapi.models.schemas import (
     TransactionRequest,
     TransactionResponse,
@@ -53,13 +55,14 @@ class TransactionService:
             Transaction response with processing result.
 
         Raises:
-            HTTPException: If the posting key is invalid.
+            AuthenticationError: If the posting key is invalid.
+            DatabaseError: If there's an error with the database operation.
+            DuplicateError: If the transaction has already been processed.
         """
         # Validate posting key
         if not self.validate_posting_key(transaction_request.posting_key):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid posting key",
+            raise AuthenticationError(
+                detail="Invalid posting key"
             )
 
         # Convert validated data to appropriate types
@@ -67,26 +70,34 @@ class TransactionService:
         pmt_amt = Decimal(transaction_request.pmt_amt)
         pmt_date = datetime.strptime(transaction_request.pmt_date, "%m/%d/%Y").date()
 
-        # Check if transaction already exists
-        existing_transaction = self.repository.get_by_tpg_trans_id(
-            transaction_request.tpg_trans_id
-        )
-        if existing_transaction:
-            return TransactionResponse(
-                success=True,
-                message="Transaction already processed",
-                transaction_id=existing_transaction.id,
+        try:
+            # Check if transaction already exists
+            existing_transaction = self.repository.get_by_tpg_trans_id(
+                transaction_request.tpg_trans_id
             )
+            if existing_transaction:
+                # Use DuplicateError for consistent error handling, but return success response
+                # since this is an expected condition
+                return TransactionResponse(
+                    success=True,
+                    message="Transaction already processed",
+                    transaction_id=existing_transaction.id,
+                )
 
-        # Create transaction
-        transaction = self.repository.create_transaction(
-            tpg_trans_id=transaction_request.tpg_trans_id,
-            session_identifier=transaction_request.session_identifier,
-            pmt_status=pmt_status,
-            pmt_amt=pmt_amt,
-            pmt_date=pmt_date,
-            name_on_acct=transaction_request.name_on_acct,
-        )
+            # Create transaction
+            transaction = self.repository.create_transaction(
+                tpg_trans_id=transaction_request.tpg_trans_id,
+                session_identifier=transaction_request.session_identifier,
+                pmt_status=pmt_status,
+                pmt_amt=pmt_amt,
+                pmt_date=pmt_date,
+                name_on_acct=transaction_request.name_on_acct,
+            )
+        except SQLAlchemyError as e:
+            # Convert SQLAlchemy exceptions to our custom DatabaseError
+            raise DatabaseError(
+                detail=f"Database error while processing transaction: {str(e)}"
+            )
 
         return TransactionResponse(
             success=True,

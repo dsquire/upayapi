@@ -2,8 +2,9 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Form, HTTPException, status
+from fastapi import APIRouter, Depends, Form
 
+from upayapi.exceptions import ValidationError
 from upayapi.models.schemas import (
     TransactionRequest,
     TransactionResponse,
@@ -55,15 +56,12 @@ async def upay_posting(
         )
         result = transaction_service.process_transaction(transaction_request)
         return result
-    except HTTPException as e:
-        # Re-raise HTTP exceptions
+    except ValidationError:
+        # Re-raise validation errors
         raise
     except Exception as e:
-        # Log the error (in a production environment)
-        # logger.error(f"Error processing uPay posting: {str(e)}")
-
-        # Return a generic error response
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An error occurred while processing the transaction",
+        # Log the error and convert to ValidationError
+        # Our global exception handlers will take care of other specific exceptions
+        raise ValidationError(
+            detail=f"Error validating transaction data: {str(e)}"
         )

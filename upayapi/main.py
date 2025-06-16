@@ -4,11 +4,11 @@ import logging
 from typing import Literal, Optional
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from upayapi.config import settings
 from upayapi.database import engine, Base
+from upayapi.exceptions import register_exception_handlers
 from upayapi.routes import upay
 
 # Import models to ensure they are registered with Base.metadata
@@ -77,29 +77,7 @@ def create_app(env: Optional[Literal["dev", "test", "prod"]] = None) -> FastAPI:
     return app
 
 
-def register_exception_handlers(app: FastAPI) -> None:
-    """Register exception handlers for the application.
-
-    Args:
-        app: The FastAPI application.
-    """
-
-    @app.exception_handler(Exception)
-    async def global_exception_handler(request: Request, exc: Exception):
-        """Global exception handler for unhandled exceptions.
-
-        Args:
-            request: The request that caused the exception.
-            exc: The exception that was raised.
-
-        Returns:
-            JSON response with error details.
-        """
-        logger.error(f"Unhandled exception: {str(exc)}")
-        return JSONResponse(
-            status_code=500,
-            content={"detail": "An internal server error occurred"},
-        )
+# register_exception_handlers is now imported from upayapi.exceptions
 
 
 def register_routes(app: FastAPI) -> None:
